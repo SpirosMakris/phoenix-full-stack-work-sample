@@ -2,6 +2,8 @@ defmodule FlyWeb.AppLive.Show do
   use FlyWeb, :live_view
   require Logger
 
+  use Phoenix.Component
+
   alias Fly.Client
 
   @impl true
@@ -110,6 +112,29 @@ defmodule FlyWeb.AppLive.Show do
 
   def preview_url(app) do
     "https://#{app["name"]}.fly.dev"
+  end
+
+
+  # Function components/blocks
+  def card(assigns) do
+    ~H"""
+    <div class="mt-8 mb-4 flex-1 flex flex-col px-4 py-4 bg-white shadow-lg rounded-lg cursor-pointer">
+      <h3> <%= assigns.title %> </h3>
+      <%= render_block(@inner_block) %>
+
+    </div>
+    """
+  end
+
+  def card_entry(assigns) do
+    ~H"""
+      <div class="py-2 mr-12 flex flex-col capitalize text-gray-700">
+        <span> <%= assigns.title %> </span>
+        <span class="mt-1 text-black">
+          <%= assigns.value %>
+        </span>
+      </div>
+    """
   end
 
 end
