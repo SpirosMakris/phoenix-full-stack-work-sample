@@ -74,20 +74,42 @@ defmodule FlyWeb.AppLive.Show do
     case Client.fetch_app_status(app_name, show_completed, socket.assigns.config) do
       {:ok, app_status} ->
         Logger.debug("Successfully fetched app status")
+
         socket =
           assign(socket,
-            app_status: app_status,
+            app_status: app_status["appstatus"],
             loading: false
           )
         {:noreply, socket}
 
-        # @TODO: See we if need special error case for auth
+      # @TODO: See we if need special error case for auth
       {:error, reason} ->
         Logger.error("Failed to fetch app status. Reason: #{inspect reason}")
         socket = put_flash(socket, :error, reason)
 
         {:noreply, socket}
     end
+  end
+
+  # HTML helpers
+  def status_bg_color(app) do
+    case app["status"] do
+      "running" -> "bg-green-100"
+      "dead" -> "bg-red-100"
+      _ -> "bg-yellow-100"
+    end
+  end
+
+  def status_text_color(app) do
+    case app["status"] do
+      "running" -> "text-green-800"
+      "dead" -> "text-red-800"
+      _ -> "text-yellow-800"
+    end
+  end
+
+  def preview_url(app) do
+    "https://#{app["name"]}.fly.dev"
   end
 
 end
