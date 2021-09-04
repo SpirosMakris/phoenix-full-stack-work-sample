@@ -1,8 +1,9 @@
-defmodule FlyWeb.AppLive.Show do
+defmodule FlyWeb.AppLive.ShowOLD do
   use FlyWeb, :live_view
   require Logger
 
   alias Fly.Client
+  alias FlyWeb.Components.HeaderBreadcrumbs
 
   @impl true
   def mount(%{"name" => name}, session, socket) do
@@ -16,8 +17,7 @@ defmodule FlyWeb.AppLive.Show do
         authenticated: true
       )
 
-
-    # Make API call only on connected mount
+    # Only make the API call if the websocket is setup. Not on initial render.
     if connected?(socket) do
       {:ok, fetch_app(socket)}
     else
@@ -34,7 +34,6 @@ defmodule FlyWeb.AppLive.Show do
 
     case Client.fetch_app(app_name, socket.assigns.config) do
       {:ok, app} ->
-        Logger.debug("Successfully fetched app")
         assign(socket, :app, app)
 
       {:error, :unauthorized} ->
@@ -47,4 +46,28 @@ defmodule FlyWeb.AppLive.Show do
     end
   end
 
+  @impl true
+  def handle_event("click", _params, socket) do
+    {:noreply, assign(socket, count: socket.assigns.count + 1)}
+  end
+
+  def status_bg_color(app) do
+    case app["status"] do
+      "running" -> "bg-green-100"
+      "dead" -> "bg-red-100"
+      _ -> "bg-yellow-100"
+    end
+  end
+
+  def status_text_color(app) do
+    case app["status"] do
+      "running" -> "text-green-800"
+      "dead" -> "text-red-800"
+      _ -> "text-yellow-800"
+    end
+  end
+
+  def preview_url(app) do
+    "https://#{app["name"]}.fly.dev"
+  end
 end
