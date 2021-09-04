@@ -1,3 +1,22 @@
 <div id="app-details">
   <div> <%= inspect @app %> </div>
+
+  <%= if @loading do %>
+  <div> LOADING STATUS </div>
+  <% end %>
+
+  <%= if @app do %>
+
+
+  <div phx-click="refresh">
+    Refresh
+  </div>
+
+  <%= if @app_status do %>
+    <div> <%= inspect @app_status %> </div>
+  <% end %>
+  <div>
+
+  </div>
+  <% end %>
 </div>

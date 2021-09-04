@@ -257,6 +257,67 @@ defmodule Fly.Client do
     end
   end
 
+  # @ADDED
+
+  def fetch_app_status(app_name, show_completed, config) do
+    """
+    query($appName: String!, $showCompleted: Boolean) {
+      appstatus:app(name: $appName) {
+        id
+        name
+        deployed
+        status
+        hostname
+        version
+        appUrl
+        organization {
+          slug
+        }
+        deploymentStatus {
+          id
+          status
+          version
+          description
+          placedCount
+          promoted
+          desiredCount
+          healthyCount
+          unhealthyCount
+        }
+        allocations(showCompleted: $showCompleted) {
+          id
+          idShort
+          version
+          latestVersion
+          status
+          desiredStatus
+          totalCheckCount
+          passingCheckCount
+          warningCheckCount
+          criticalCheckCount
+          createdAt
+          updatedAt
+          canary
+          region
+          restarts
+          healthy
+          privateIP
+          taskName
+          checks {
+            status
+            output
+            name
+          }
+        }
+      }
+    }
+    """
+    |> perform_query(%{appName: app_name, showCompleted: show_completed}, config, :fetch_app_status)
+    |> handle_response()
+    |> IO.inspect
+  end
+  # END @ADDED
+
   # Handle the GraphQL API responses. Handles success and error responses.
   # Transforms the data into a format we want.
   # Detect that there is an error message and return only the first error message.
