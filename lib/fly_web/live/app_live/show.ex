@@ -141,7 +141,7 @@ defmodule FlyWeb.AppLive.Show do
   def card(assigns) do
     ~H"""
     <div class="mt-8 mb-4 flex-1 flex flex-col px-4 py-4 bg-white shadow-lg rounded-lg cursor-pointer">
-      <h3> <%= assigns.title %> </h3>
+      <h3 class="text-black"> <%= assigns.title %> </h3>
       <%= render_block(@inner_block) %>
 
     </div>
@@ -150,8 +150,8 @@ defmodule FlyWeb.AppLive.Show do
 
   def card_entry(assigns) do
     ~H"""
-      <div class="py-2 mr-12 flex flex-col capitalize text-gray-700">
-        <span> <%= assigns.title %> </span>
+      <div class="py-2 mr-12 flex flex-col capitalize">
+        <span class="font-semibold text-gray-500"> <%= assigns.title %> </span>
         <span class="mt-1 text-black">
           <%= assigns.value %>
         </span>
@@ -181,20 +181,20 @@ defmodule FlyWeb.AppLive.Show do
       <table class="max-w-5xl table-auto">
         <thead class="justify-between">
           <tr class="bg-gray-100">
-            <th class="px-16 py-2">
+            <th class="px-8 py-2">
               <span class="text-white-100 font-semibold">Desired</span>
             </th>
 
-            <th class="px-16 py-2">
+            <th class="px-8 py-2">
               <span class="text-white-100 font-semibold">Placed</span>
             </th>
 
-            <th class="px-16 py-2">
+            <th class="px-8 py-2">
               <span class="text-green-600 font-semibold">Healthy</span>
             </th>
 
-            <th class="px-16 py-2">
-              <span class="text-red-600 font-semibold">Unealthy</span>
+            <th class="px-8 py-2">
+              <span class="text-red-600 font-semibold">Unhealthy</span>
             </th>
 
           </tr>
@@ -202,20 +202,20 @@ defmodule FlyWeb.AppLive.Show do
         <tbody class="bg-gray-200">
           <tr class="bg-white border-b-2 border-gray-200">
 
-            <td class="px-16 py-2">
-              <span class="px-16 py-2"><%= assigns.depl_status["desiredCount"] %></span>
+            <td class="px-8 py-2">
+              <span class="px-8 py-2"><%= assigns.depl_status["desiredCount"] %></span>
             </td>
 
-            <td class="px-16 py-2">
-              <span class="px-16 py-2"><%= assigns.depl_status["placedCount"] %></span>
+            <td class="px-8 py-2">
+              <span class="px-8 py-2"><%= assigns.depl_status["placedCount"] %></span>
             </td>
 
-            <td class="px-16 py-2">
-              <span class="px-16 py-2"><%= assigns.depl_status["healthyCount"] %></span>
+            <td class="px-8 py-2">
+              <span class="px-8 py-2"><%= assigns.depl_status["healthyCount"] %></span>
             </td>
 
-            <td class="px-16 py-2">
-              <span class="px-16 py-2"><%= assigns.depl_status["unhealthyCount"] %></span>
+            <td class="px-8 py-2">
+              <span class="px-8 py-2"><%= assigns.depl_status["unhealthyCount"] %></span>
             </td>
 
           </tr>
@@ -223,6 +223,124 @@ defmodule FlyWeb.AppLive.Show do
       </table>
     </div>
     """
+  end
+
+  def instances_table(assigns) do
+    IO.inspect assigns
+    ~H"""
+    <div class="mt-2">
+      <table class="max-w-screen table-auto">
+        <thead class="justify-between">
+          <tr class="bg-gray-100 text-sm">
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">ID</span>
+            </th>
+
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">Task</span>
+            </th>
+
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">Version</span>
+            </th>
+
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">Region</span>
+            </th>
+
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">Desired</span>
+            </th>
+
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">Status</span>
+            </th>
+
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">Health Checks</span>
+            </th>
+
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">Restarts</span>
+            </th>
+
+            <th class="px-8 py-2">
+              <span class="text-white-100 font-semibold">Created</span>
+            </th>
+
+
+          </tr>
+        </thead>
+        <tbody class="bg-gray-200">
+
+          <%= for alloc <- assigns.allocations do %>
+            <tr class="bg-white border-b-2 border-gray-200 text-right">
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= alloc["idShort"] %></span>
+              </td>
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= alloc["taskName"] %></span>
+              </td>
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= alloc["version"] %></span>
+              </td>
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= alloc["region"] %></span>
+              </td>
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= alloc["desiredStatus"] %></span>
+              </td>
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= alloc["status"] %></span>
+              </td>
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= "#{alloc["totalCheckCount"]} total, #{alloc["passingCheckCount"]} passing" %></span>
+              </td>
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= alloc["restarts"] %></span>
+              </td>
+
+              <td class="px-8 py-2">
+                <span class="px-8 py-2"><%= "#{format_created_at(alloc["createdAt"])} ago" %></span>
+              </td>
+
+
+            </tr>
+
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    """
+  end
+
+  defp format_created_at(started_dt) do
+
+    with  {:ok, now} <- DateTime.now("Etc/UTC"),
+          {:ok, started_at, 0} <- DateTime.from_iso8601(started_dt) do
+
+              DateTime.diff(now, started_at, :second)
+              |> format_duration()
+
+          else
+            error ->
+              Logger.error("Failed to format created_at field for instance: Error: #{inspect error}")
+              "@ERROR"
+          end
+  end
+
+  defp format_duration(seconds) do
+    ~T[00:00:00]
+    |> Time.add(seconds)
+    |> Calendar.strftime("%-0X")
   end
 
 end

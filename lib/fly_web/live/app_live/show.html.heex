@@ -111,46 +111,9 @@
 
       <%# Instances status card @TODO %>
       <.card title="Instances">
-        
+        <.instances_table allocations={@app_status["allocations"]} />
       </.card>
 
-
-      <%# Allocations  status card @TODO %>      
-      <.card title="Allocations">
-
-        <%= for alloc <- @app_status["allocations"] do %>
-
-          <div class="mb-2 ml-4 border">
-            <h4 class="font-semibold underline"> <%= "#{alloc["idShort"]} - v#{alloc["version"]}" %> </h4>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div class="flex flex-col">    
-
-                <%# Deployment ID %>
-                <.card_entry title="Depl. ID" value={alloc["id"]} />
-                <%# Version %>
-                <.card_entry title="version" value={alloc["version"]} />
-               
-              </div>
-
-              <div class="flex flex-col">    
-                <%# Status %>
-                <.card_entry title="status" value={alloc["status"]} />
-
-                <%# Health %>
-                <.card_entry title="description" value={alloc["status"]} />
-              </div>
-
-              <div class="flex flex-col">
-
-              </div>
-            </div>
-          </div>
-        <% end %>       
-      </.card>
-
-
-      
     </main>
   <% end %>
   <div>
