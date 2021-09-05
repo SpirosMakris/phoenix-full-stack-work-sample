@@ -6,6 +6,7 @@ defmodule FlyWeb.AppLive.Show do
 
   alias Fly.Client
 
+
   @impl true
   def mount(%{"name" => name}, session, socket) do
     socket =
@@ -17,7 +18,8 @@ defmodule FlyWeb.AppLive.Show do
         app_name: name,
         app_status: nil,
         count: 0,
-        authenticated: true
+        authenticated: true,
+        refresh_rate: 5
       )
 
 
@@ -69,6 +71,13 @@ defmodule FlyWeb.AppLive.Show do
     {:noreply, assign(socket, loading: true)}
   end
 
+  def handle_event("select-refresh-rate", %{"refresh-rate" => rate}, socket) do
+    Logger.debug("handle-event 'select-refresh-rate'")
+
+
+    {:noreply, assign(socket, refresh_rate: rate)}
+  end
+
   @impl true
   def handle_info({:fetch_app_status, app_name, show_completed}, socket) do
     Logger.debug("handle_info ':fetch_app_status'")
@@ -92,6 +101,19 @@ defmodule FlyWeb.AppLive.Show do
         {:noreply, socket}
     end
   end
+
+  # Logic helpers
+  def depl_status(app_status), do: app_status["deploymentStatus"]
+
+  def depl_status(app_status, field) when not is_nil(app_status) do
+    depl = app_status["deploymentStatus"]
+    depl["#{field}"]
+  end
+
+  def depl_status(nil, _field) do
+    nil
+  end
+
 
   # HTML helpers
   def status_bg_color(app) do
@@ -134,6 +156,72 @@ defmodule FlyWeb.AppLive.Show do
           <%= assigns.value %>
         </span>
       </div>
+    """
+  end
+
+  def refresh_rate(assigns) do
+    ~H"""
+    <div id="select-refresh-rate">
+      <form phx-change="select-refresh-rate">
+        <label for="refresh-rate">Refresh rate: </label>
+        <select name="refresh-rate">
+          <%= options_for_select(["2s": 2, "5s": 5], assigns.rate) %>
+        </select>
+
+      </form>
+    </div>
+    """
+  end
+
+  def depl_instances_table(assigns) do
+    IO.inspect assigns
+    ~H"""
+    <div class="mt-2">
+      <div> Deployment Instances </div>
+      <table class="max-w-5xl table-auto">
+        <thead class="justify-between">
+          <tr class="bg-gray-100">
+            <th class="px-16 py-2">
+              <span class="text-white-100 font-semibold">Desired</span>
+            </th>
+
+            <th class="px-16 py-2">
+              <span class="text-white-100 font-semibold">Placed</span>
+            </th>
+
+            <th class="px-16 py-2">
+              <span class="text-green-600 font-semibold">Healthy</span>
+            </th>
+
+            <th class="px-16 py-2">
+              <span class="text-red-600 font-semibold">Unealthy</span>
+            </th>
+
+          </tr>
+        </thead>
+        <tbody class="bg-gray-200">
+          <tr class="bg-white border-b-2 border-gray-200">
+
+            <td class="px-16 py-2">
+              <span class="px-16 py-2"><%= assigns.depl_status["desiredCount"] %></span>
+            </td>
+
+            <td class="px-16 py-2">
+              <span class="px-16 py-2"><%= assigns.depl_status["placedCount"] %></span>
+            </td>
+
+            <td class="px-16 py-2">
+              <span class="px-16 py-2"><%= assigns.depl_status["healthyCount"] %></span>
+            </td>
+
+            <td class="px-16 py-2">
+              <span class="px-16 py-2"><%= assigns.depl_status["unhealthyCount"] %></span>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
     """
   end
 
