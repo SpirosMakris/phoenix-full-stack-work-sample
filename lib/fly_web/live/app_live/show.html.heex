@@ -1,27 +1,23 @@
 <div id="app-details">
-  <div> <%= inspect @app, pretty: true %> </div>
-
-  <%= if @loading do %>
-  <div> LOADING STATUS </div>
-  <% end %>
+  <%# <div> <%= inspect @app, pretty: true </div> %>
 
   <%= if @app do %>
 
-
-  <div phx-click="refresh">
-    Refresh
-  </div>
-
   <%= if @app_status do %>
-    <div> <%= inspect @app_status %> </div>
-
-    <.refresh_rate rate={@refresh_rate} />
+    <%# <div> <%= inspect @app_status  </div> %>
 
     <main class="px-6 flex-1 flex flex-col bg-gray-100 transition duration-500 ease-in-out overflow-y-auto">
-      <%# Title %>
-      <h2 class="my-4 text-4xl font-semibold">
-      Application Status
-      </h2>
+
+      <div class="flex justify-between">
+
+        <%# Title %>
+        <h2 class="my-4 text-4xl font-semibold">
+        Application Status
+        </h2>
+
+        <.refresh_rate rate={@refresh_rate} loading={@loading} />
+
+      </div>
 
       <%# App card %>
       <div class="mt-8 mb-4 flex-1 flex flex-col px-4 py-4 bg-white shadow-lg rounded-lg cursor-pointer">

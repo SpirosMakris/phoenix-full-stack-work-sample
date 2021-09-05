@@ -19,7 +19,7 @@ defmodule FlyWeb.AppLive.Show do
         app_status: nil,
         count: 0,
         authenticated: true,
-        refresh_rate: 5
+        refresh_rate: 30
       )
 
 
@@ -74,13 +74,24 @@ defmodule FlyWeb.AppLive.Show do
   def handle_event("select-refresh-rate", %{"refresh-rate" => rate}, socket) do
     Logger.debug("handle-event 'select-refresh-rate'")
 
+    ref_rate = if is_integer(rate) do
+      rate
+    else
+      {rate, ""} = Integer.parse(rate)
+      rate
+    end
 
-    {:noreply, assign(socket, refresh_rate: rate)}
+    {:noreply, assign(socket, refresh_rate: ref_rate)}
   end
 
   @impl true
   def handle_info({:fetch_app_status, app_name, show_completed}, socket) do
     Logger.debug("handle_info ':fetch_app_status'")
+
+
+    rate = socket.assigns.refresh_rate
+
+    Process.send_after(self(), {:fetch_app_status, app_name, show_completed}, rate * 1000)
 
     case Client.fetch_app_status(app_name, show_completed, socket.assigns.config) do
       {:ok, app_status} ->
@@ -102,6 +113,7 @@ defmodule FlyWeb.AppLive.Show do
     end
   end
 
+
   # Logic helpers
   def depl_status(app_status), do: app_status["deploymentStatus"]
 
@@ -113,7 +125,6 @@ defmodule FlyWeb.AppLive.Show do
   def depl_status(nil, _field) do
     nil
   end
-
 
   # HTML helpers
   def status_bg_color(app) do
@@ -161,12 +172,20 @@ defmodule FlyWeb.AppLive.Show do
 
   def refresh_rate(assigns) do
     ~H"""
-    <div id="select-refresh-rate">
+    <div id="select-refresh-rate" class="my-4">
       <form phx-change="select-refresh-rate">
-        <label for="refresh-rate">Refresh rate: </label>
+        <!-- <label for="refresh-rate">Refresh rate: </label> -->
+        <button type="button" phx-click="refresh">
+          <%= if assigns.loading do %>
+            <%= __MODULE__.loading_svg(%{}) %>
+          <% else %>
+            Refresh
+          <% end %>
+        </button>
         <select name="refresh-rate">
-          <%= options_for_select(["2s": 2, "5s": 5], assigns.rate) %>
+          <%= options_for_select(["2s": 2, "5s": 5, "15s": 15, "30s": 30, "1m": 60, "2m": 120], assigns.rate) %>
         </select>
+
 
       </form>
     </div>
@@ -341,6 +360,44 @@ defmodule FlyWeb.AppLive.Show do
     ~T[00:00:00]
     |> Time.add(seconds)
     |> Calendar.strftime("%-0X")
+  end
+
+  def loading_svg(assigns) do
+    ~H"""
+
+    <svg class="fill-current text-white-500 h-2" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="15" cy="15" r="15">
+        <animate attributeName="r" from="15" to="15"
+                 begin="0s" dur="0.8s"
+                 values="15;9;15" calcMode="linear"
+                 repeatCount="indefinite" />
+        <animate attributeName="fill-opacity" from="1" to="1"
+                 begin="0s" dur="0.8s"
+                 values="1;.5;1" calcMode="linear"
+                 repeatCount="indefinite" />
+    </circle>
+    <circle cx="60" cy="15" r="9" fill-opacity="0.3">
+        <animate attributeName="r" from="9" to="9"
+                 begin="0s" dur="0.8s"
+                 values="9;15;9" calcMode="linear"
+                 repeatCount="indefinite" />
+        <animate attributeName="fill-opacity" from="0.5" to="0.5"
+                 begin="0s" dur="0.8s"
+                 values=".5;1;.5" calcMode="linear"
+                 repeatCount="indefinite" />
+    </circle>
+    <circle cx="105" cy="15" r="15">
+        <animate attributeName="r" from="15" to="15"
+                 begin="0s" dur="0.8s"
+                 values="15;9;15" calcMode="linear"
+                 repeatCount="indefinite" />
+        <animate attributeName="fill-opacity" from="1" to="1"
+                 begin="0s" dur="0.8s"
+                 values="1;.5;1" calcMode="linear"
+                 repeatCount="indefinite" />
+    </circle>
+    </svg>
+    """
   end
 
 end
