@@ -33,16 +33,31 @@
     </header>
   </div>
 
+  <script>
+    // Function to call into Hook and push a visibility event
+    // to a specific AppStatus liveview ()
+    function update_vis(e, visible) {
+
+      const target = e.id.replace('li-', '');
+      
+      console.log(`Target LV: ${target}`)
+           
+      AppStatusHook.push_set_visible(visible, target)      
+    }
+  </script>
+
   <main class="-mt-32">
     <div class="max-w-7xl mx-auto pb-12 px-4 sm:px-6 lg:px-8">
       <div class="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
         <!-- This example requires Tailwind CSS v2.0+ -->
         <div class="bg-white overflow-hidden sm:rounded-md">
-          <ul role="list" class="divide-y divide-gray-200">
+          <ul role="list" class="divide-y divide-gray-200" phx-hook="AppStatusHook" id="app-list">
             <%= for app <- @apps do %>
-              <li x-data="{open: false}" @click.away="open = false">
+              <li x-data="{open: false}" @click.away="open = false; update_vis($el, false)" id={"#li-app-status-#{app["name"]}"}>
                 
-                <button @click="open = !open">
+                <button
+                  x-on:click='open = !open; update_vis($el, open)'
+                  >
                   <div x-show="open" class="flex py-2 mt-2 shadow-md rounded-full bg-green-300 w-6 h-6 justify-center items-center">
                     <%# Chevron up %>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
@@ -94,7 +109,7 @@
                  
                 <%# App status %>
                 <div :class="{'flex': open, 'hidden': !open}">                
-                  <%= live_render(@socket, AppStatus, id: "app-status=#{app["name"]}", session: %{"name" => app["name"]}) %>
+                  <%= live_render(@socket, AppStatus, id: "app-status-#{app["name"]}", session: %{"name" => app["name"]}) %>
                 </div>
 
                 <% end %>

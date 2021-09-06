@@ -16,7 +16,8 @@ callback after a certain amount of time, denoted as `refresh_period` in
 the socket assigns. This way we have periodic refreshes of the data, that
 can be configured in regards to their frequency.
 
-We also handle 2 events coming from the client, 'refresh` & `select-refresh-period`.
+We also handle 3 events coming from the client, 'refresh`, `select-refresh-period`
+and `set-visible`
 * The `refresh` event is emitted when the user clicks on the `Refresh` button
 in the client and executes an immediate refresh.
 
@@ -24,14 +25,29 @@ in the client and executes an immediate refresh.
 refresh period in the client's UI and updates the LiveView's state in
 the server to reflect the change intended.
 
+* The `set-visible` event is emitted when the visibility of each 
+`AppStatus` instance is modified in the frontend. 
+
 There are also some helper functions in this module, the most notable 
 being some function components (since we're using the latest LiveView version)
 These help de-clutter the template a lot and also help avoid HTML & Tailwind
 duplication.
 
-In the template, I've also used a bit of Alpine to handle showing/hiding the
-application status (`AppStatus`) LiveView on each app in the list. This is
-done by clicking the chevron on the top left of each app entry.
+In the template, I've also used a bit of Alpine to handle showing/hiding 
+the application status (`AppStatus`) LiveView on each app in the list. 
+This is done by clicking the chevron on the top left of each app entry.
+
+
+I also use a hook `AppStatusHook`, defined in `assets/js/hooks/app_status_hook.js`
+to push `set-visible` events to their corresponding liveview, when
+the open/close button for each app is clicked, or when the user
+clicks away from all apps and they all need to be closed.
+This is initiated in `index.html.leex`, in the `li` elements.
+
+I chose this more complex way of handling visibility changes, instead of
+using only LiveView events because handling it with Alpine is more
+responsive for the user, especially at higher net latencies, where a 
+roundtrip to the server is not performed.
 
 We mount a LiveView per app listed and only show one at a time so that the
 interface doesn't clutter up and become visually complex.
@@ -66,6 +82,13 @@ __Stop/Restart buttons for VM in Instances Table section.__
   button/link that navigates to the Show details page instead.
   I find the above interaction more intuitive.
 
+* Perform some optimization for initial app index view mounting. Also
+  display something on screen while apps are fetched. Maybe a small
+  loader animation with some text that informs the user that apps are
+  loading.
+
+* Move function components in `AppStatus` to their own module
+
 * Study the API & Fly's architecture a bit more to see if there's
 some other functionality that can be implemented in this component.
 
@@ -97,7 +120,7 @@ as we should stay out of the way of the user.
 ## What I've learned
 * Using function components
 * Using new HEEX syntax
-* Improved my understanding of using Phoenix LiveView (also of TailWind)
+* Improved my understanding of using Phoenix LiveView (also TailWind & Alpine)
 
 The implementation took about 8-9 hours since I had so much fun. Also I
 need more practice with Tailwind because I find it is the major thing that 

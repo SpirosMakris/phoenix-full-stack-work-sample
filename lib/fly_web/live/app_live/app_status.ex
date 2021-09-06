@@ -13,6 +13,7 @@ defmodule FlyWeb.Components.AppStatus do
         config: client_config(session),
         state: :loading,
         loading: false,
+        visible: false,
         app: nil,
         app_name: name,
         app_status: nil,
@@ -43,7 +44,7 @@ defmodule FlyWeb.Components.AppStatus do
         # Now that we have the app. get the status (async)
         show_completed = true
 
-        # Use message to self to fetch status
+        # Send message to self to fetch status
         send(self(), {:fetch_app_status, app_name, show_completed})
 
         assign(socket, :app, app)
@@ -81,7 +82,28 @@ defmodule FlyWeb.Components.AppStatus do
         period
       end
 
+    # Send an immediate refresh message
+    # This also sets the next refresh timer to the new value
+    app_name = socket.assigns.app_name
+    show_completed = true
+    send(self(), {:fetch_app_status, app_name, show_completed})
+
     {:noreply, assign(socket, refresh_period: ref_period)}
+  end
+
+  def handle_event("set-visible", %{"visible" => visible} = _params, socket) do
+    Logger.debug("handle_event 'set-visible' for app: #{socket.assigns.app["name"]}")
+
+    app_name = socket.assigns.app_name
+    show_completed = true
+
+    # First update visible so handle_info can trigger refresh
+    socket = assign(socket, visible: visible)
+
+    # Perform a status fetch
+    send(self(), {:fetch_app_status, app_name, show_completed})
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -90,7 +112,9 @@ defmodule FlyWeb.Components.AppStatus do
 
     period = socket.assigns.refresh_period
 
-    Process.send_after(self(), {:fetch_app_status, app_name, show_completed}, period * 1000)
+    # Only 'recurse' if we are visible, otherwise no point
+    if socket.assigns.visible,
+      do: Process.send_after(self(), {:fetch_app_status, app_name, show_completed}, period * 1000)
 
     case Client.fetch_app_status(app_name, show_completed, socket.assigns.config) do
       {:ok, app_status} ->
@@ -170,7 +194,7 @@ defmodule FlyWeb.Components.AppStatus do
 
   def refresh_period(assigns) do
     ~H"""
-    <div id="select-refresh-period" class="my-4">
+    <div id={assigns.id} class="my-4">
       <form phx-change="select-refresh-period">
         <!-- <label for="refresh-period">Refresh period: </label> -->
         <button type="button" phx-click="refresh">

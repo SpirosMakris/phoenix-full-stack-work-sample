@@ -318,7 +318,8 @@ defmodule Fly.Client do
       :fetch_app_status
     )
     |> handle_response()
-    |> IO.inspect()
+
+    # |> IO.inspect()
   end
 
   # END @ADDED
