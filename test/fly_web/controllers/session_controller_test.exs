@@ -75,6 +75,7 @@ defmodule FlyWeb.SessionControllerTest do
     test "deletes chosen session", %{conn: conn, session: session} do
       conn = delete(conn, Routes.session_path(conn, :delete, session))
       assert redirected_to(conn) == Routes.session_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.session_path(conn, :show, session))
       end

@@ -40,10 +40,29 @@
         <div class="bg-white overflow-hidden sm:rounded-md">
           <ul role="list" class="divide-y divide-gray-200">
             <%= for app <- @apps do %>
-              <li>
+              <li x-data="{open: false}" @click.away="open = false">
+                
+                <button @click="open = !open">
+                  <div x-show="open" class="flex py-2 mt-2 shadow-md rounded-full bg-green-300 w-6 h-6 justify-center items-center">
+                    <%# Chevron up %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                    </svg>
+                  </div>
+
+                  <%# Chevron down %>
+                  <div x-show="!open" class="flex py-2 mt-2 shadow-md rounded-full bg-green-100 w-6 h-6 justify-center items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                  </div>
+                </button>
+
                 <%= link to: Routes.app_show_path(@socket, :show, app["name"]), class: "block hover:bg-gray-50" do %>
+
                   <div class="px-4 py-4 sm:px-6">
                     <div class="flex items-center justify-between">
+
                       <p class="text-sm font-medium text-indigo-600 truncate">
                         <%= app["name"] %>
                       </p>
@@ -71,6 +90,13 @@
                       </div>
                     </div>
                   </div>
+
+                 
+                <%# App status %>
+                <div :class="{'flex': open, 'hidden': !open}">                
+                  <%= live_render(@socket, AppStatus, id: "app-status=#{app["name"]}", session: %{"name" => app["name"]}) %>
+                </div>
+
                 <% end %>
               </li>
             <% end %>

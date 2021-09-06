@@ -150,7 +150,12 @@ defmodule Fly.ClientFake do
   end
 
   # create_template_deployment
-  def perform_query(_query_string, %{input: %{faker: "name_taken"}}, _config, :create_template_deployment) do
+  def perform_query(
+        _query_string,
+        %{input: %{faker: "name_taken"}},
+        _config,
+        :create_template_deployment
+      ) do
     {:ok,
      %Neuron.Response{
        body: %{
@@ -280,7 +285,12 @@ defmodule Fly.ClientFake do
      }}
   end
 
-  def perform_query(_query_string, %{id: "unknown_error"}, _config, :get_template_deployment_status) do
+  def perform_query(
+        _query_string,
+        %{id: "unknown_error"},
+        _config,
+        :get_template_deployment_status
+      ) do
     {:error,
      %Neuron.Response{
        body: %{
@@ -297,7 +307,12 @@ defmodule Fly.ClientFake do
      }}
   end
 
-  def perform_query(_query_string, %{id: "fake-status-pending"}, _config, :get_template_deployment_status) do
+  def perform_query(
+        _query_string,
+        %{id: "fake-status-pending"},
+        _config,
+        :get_template_deployment_status
+      ) do
     {:ok,
      %Neuron.Response{
        body: %{
@@ -314,7 +329,12 @@ defmodule Fly.ClientFake do
      }}
   end
 
-  def perform_query(_query_string, %{id: "fake-status-running"}, _config, :get_template_deployment_status) do
+  def perform_query(
+        _query_string,
+        %{id: "fake-status-running"},
+        _config,
+        :get_template_deployment_status
+      ) do
     {:ok,
      %Neuron.Response{
        body: %{
@@ -409,8 +429,7 @@ defmodule Fly.ClientFake do
   def perform_http_get("https://500.fly.dev", _opts) do
     {:ok,
      %HTTPoison.Response{
-       body:
-         "Server Error\n",
+       body: "Server Error\n",
        headers: [],
        request: %HTTPoison.Request{
          body: "",

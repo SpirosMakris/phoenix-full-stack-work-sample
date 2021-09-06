@@ -7,7 +7,8 @@ defmodule Fly.ClientBehaviour do
   @type args :: map()
   @type fun_name :: atom()
 
-  @callback perform_query(query_string, args, config :: keyword(), fun_name) :: {:ok, map()} | {:error, String.t()}
+  @callback perform_query(query_string, args, config :: keyword(), fun_name) ::
+              {:ok, map()} | {:error, String.t()}
 
   @callback perform_http_get(url :: String.t(), opts :: keyword()) ::
               {:ok, HTTPoison.Response.t() | HTTPoison.AsyncResponse.t()}

@@ -312,10 +312,15 @@ defmodule Fly.Client do
       }
     }
     """
-    |> perform_query(%{appName: app_name, showCompleted: show_completed}, config, :fetch_app_status)
+    |> perform_query(
+      %{appName: app_name, showCompleted: show_completed},
+      config,
+      :fetch_app_status
+    )
     |> handle_response()
-    |> IO.inspect
+    |> IO.inspect()
   end
+
   # END @ADDED
 
   # Handle the GraphQL API responses. Handles success and error responses.

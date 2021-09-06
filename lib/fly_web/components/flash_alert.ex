@@ -10,6 +10,7 @@ defmodule FlyWeb.Components.FlashAlert do
   end
 
   defp render_alert(%{flash_msg: nil} = assigns), do: ~H""
+
   defp render_alert(%{flash_msg: _, type: type} = assigns) do
     assigns =
       assigns

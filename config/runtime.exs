@@ -22,16 +22,16 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
-#   database_url =
-#     System.get_env("DATABASE_URL") ||
-#       raise """
-#       environment variable DATABASE_URL is missing.
-#       For example: ecto://USER:PASS@HOST/DATABASE
-#       """
+  #   database_url =
+  #     System.get_env("DATABASE_URL") ||
+  #       raise """
+  #       environment variable DATABASE_URL is missing.
+  #       For example: ecto://USER:PASS@HOST/DATABASE
+  #       """
 
-#   config :fly, Fly.Repo,
-#     url: database_url,
-#     # IMPORTANT: Or it won't find the DB server
-#     #socket_options: [:inet6],
-#     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  #   config :fly, Fly.Repo,
+  #     url: database_url,
+  #     # IMPORTANT: Or it won't find the DB server
+  #     #socket_options: [:inet6],
+  #     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 end

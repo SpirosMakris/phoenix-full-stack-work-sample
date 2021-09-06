@@ -36,7 +36,8 @@ defmodule Fly.ClientTest do
     end
 
     test "handles successful response" do
-      assert {:ok, "fake-generated-successful-id"} == Client.create_template_deployment(%{}, @confg)
+      assert {:ok, "fake-generated-successful-id"} ==
+               Client.create_template_deployment(%{}, @confg)
     end
   end
 
@@ -47,7 +48,8 @@ defmodule Fly.ClientTest do
     end
 
     test "handles unauthorized failures" do
-      assert {:error, :unauthorized} = Client.fetch_template_options(%{faker: "unauthorized"}, @confg)
+      assert {:error, :unauthorized} =
+               Client.fetch_template_options(%{faker: "unauthorized"}, @confg)
     end
 
     test "successfully parses organizations and default region" do
@@ -113,11 +115,13 @@ defmodule Fly.ClientTest do
     end
 
     test "handles when returns it is pending" do
-      assert {:ok, "pending"} == Client.get_template_deployment_status("fake-status-pending", @confg)
+      assert {:ok, "pending"} ==
+               Client.get_template_deployment_status("fake-status-pending", @confg)
     end
 
     test "handles when returns it is running" do
-      assert {:ok, "running"} == Client.get_template_deployment_status("fake-status-running", @confg)
+      assert {:ok, "running"} ==
+               Client.get_template_deployment_status("fake-status-running", @confg)
     end
 
     test "successfully handles when completed" do
