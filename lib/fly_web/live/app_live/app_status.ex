@@ -18,7 +18,7 @@ defmodule FlyWeb.Components.AppStatus do
         app_status: nil,
         count: 0,
         authenticated: true,
-        refresh_rate: 30
+        refresh_period: 30
       )
 
     # Make API call only on connected mount
@@ -40,9 +40,10 @@ defmodule FlyWeb.Components.AppStatus do
       {:ok, app} ->
         Logger.debug("Successfully fetched app")
 
-        # Now that we jave the app. get the status (async)
+        # Now that we have the app. get the status (async)
         show_completed = true
 
+        # Use message to self to fetch status
         send(self(), {:fetch_app_status, app_name, show_completed})
 
         assign(socket, :app, app)
@@ -69,27 +70,27 @@ defmodule FlyWeb.Components.AppStatus do
     {:noreply, assign(socket, loading: true)}
   end
 
-  def handle_event("select-refresh-rate", %{"refresh-rate" => rate}, socket) do
-    Logger.debug("handle-event 'select-refresh-rate'")
+  def handle_event("select-refresh-period", %{"refresh-period" => period}, socket) do
+    Logger.debug("handle-event 'select-refresh-period'")
 
-    ref_rate =
-      if is_integer(rate) do
-        rate
+    ref_period =
+      if is_integer(period) do
+        period
       else
-        {rate, ""} = Integer.parse(rate)
-        rate
+        {period, ""} = Integer.parse(period)
+        period
       end
 
-    {:noreply, assign(socket, refresh_rate: ref_rate)}
+    {:noreply, assign(socket, refresh_period: ref_period)}
   end
 
   @impl true
   def handle_info({:fetch_app_status, app_name, show_completed}, socket) do
     Logger.debug("handle_info ':fetch_app_status'")
 
-    rate = socket.assigns.refresh_rate
+    period = socket.assigns.refresh_period
 
-    Process.send_after(self(), {:fetch_app_status, app_name, show_completed}, rate * 1000)
+    Process.send_after(self(), {:fetch_app_status, app_name, show_completed}, period * 1000)
 
     case Client.fetch_app_status(app_name, show_completed, socket.assigns.config) do
       {:ok, app_status} ->
@@ -167,11 +168,11 @@ defmodule FlyWeb.Components.AppStatus do
     """
   end
 
-  def refresh_rate(assigns) do
+  def refresh_period(assigns) do
     ~H"""
-    <div id="select-refresh-rate" class="my-4">
-      <form phx-change="select-refresh-rate">
-        <!-- <label for="refresh-rate">Refresh rate: </label> -->
+    <div id="select-refresh-period" class="my-4">
+      <form phx-change="select-refresh-period">
+        <!-- <label for="refresh-period">Refresh period: </label> -->
         <button type="button" phx-click="refresh">
           <%= if assigns.loading do %>
             <%= __MODULE__.loading_svg(%{}) %>
@@ -179,8 +180,8 @@ defmodule FlyWeb.Components.AppStatus do
             Refresh
           <% end %>
         </button>
-        <select name="refresh-rate">
-          <%= options_for_select(["2s": 2, "5s": 5, "15s": 15, "30s": 30, "1m": 60, "2m": 120], assigns.rate) %>
+        <select name="refresh-period">
+          <%= options_for_select(["2s": 2, "5s": 5, "15s": 15, "30s": 30, "1m": 60, "2m": 120], assigns.period) %>
         </select>
 
 
