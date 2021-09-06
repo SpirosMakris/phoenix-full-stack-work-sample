@@ -120,9 +120,18 @@
                   </dd>
                 </div>
               </div>
+
+              
             </div>
           </section>
+
+          <%# App status %>
+              <div class="">                
+                <%= live_render(@socket, AppStatus, id: "app-status=#{@app["name"]}", session: %{"name" => @app["name"]}) %>
+              </div>
         </div>
+
+        
 
         <section aria-labelledby="timeline-title" class="lg:col-start-3 lg:col-span-1">
           <div class="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">

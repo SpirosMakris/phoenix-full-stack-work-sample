@@ -197,41 +197,41 @@ defmodule FlyWeb.Components.AppStatus do
       <div> Deployment Instances </div>
       <table class="max-w-5xl table-auto">
         <thead class="justify-between">
-          <tr class="bg-gray-100">
-            <th class="px-4 py-2">
+          <tr class="bg-gray-100 text-sm">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Desired</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Placed</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-green-600 font-semibold">Healthy</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-red-600 font-semibold">Unhealthy</span>
             </th>
 
           </tr>
         </thead>
         <tbody class="bg-gray-200">
-          <tr class="bg-white border-b-2 border-gray-200">
+          <tr class="bg-white border-b-2 border-gray-200 text-sm">
 
-            <td class="px-4 py-2">
+            <td class="px-2 py-2">
               <span class="px-4 py-2"><%= assigns.depl_status["desiredCount"] %></span>
             </td>
 
-            <td class="px-4 py-2">
+            <td class="px-2 py-2">
               <span class="px-4 py-2"><%= assigns.depl_status["placedCount"] %></span>
             </td>
 
-            <td class="px-4 py-2">
+            <td class="px-2 py-2">
               <span class="px-4 py-2"><%= assigns.depl_status["healthyCount"] %></span>
             </td>
 
-            <td class="px-4 py-2">
+            <td class="px-2 py-2">
               <span class="px-4 py-2"><%= assigns.depl_status["unhealthyCount"] %></span>
             </td>
 
@@ -250,87 +250,84 @@ defmodule FlyWeb.Components.AppStatus do
       <table class="max-w-screen table-auto">
         <thead class="justify-between">
           <tr class="bg-gray-100 text-sm">
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">ID</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Task</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Version</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Region</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Desired</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Status</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Health Checks</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Restarts</span>
             </th>
 
-            <th class="px-4 py-2">
+            <th class="px-2 py-2">
               <span class="text-white-100 font-semibold">Created</span>
             </th>
-
 
           </tr>
         </thead>
         <tbody class="bg-gray-200">
 
           <%= for alloc <- assigns.allocations do %>
-            <tr class="bg-white border-b-2 border-gray-200 text-right">
+            <tr class="bg-white border-b-2 border-gray-200 text-right text-sm">
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= alloc["idShort"] %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2"><%= alloc["idShort"] %></span>
               </td>
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= alloc["taskName"] %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2"><%= alloc["taskName"] %></span>
               </td>
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= alloc["version"] %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2"><%= alloc["version"] %></span>
               </td>
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= alloc["region"] %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2"><%= alloc["region"] %></span>
               </td>
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= alloc["desiredStatus"] %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2"><%= alloc["desiredStatus"] %></span>
               </td>
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= alloc["status"] %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2"><%= alloc["status"] %></span>
               </td>
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= "#{alloc["totalCheckCount"]} total, #{alloc["passingCheckCount"]} passing" %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2 whitespace-pre-wrap text-right"><%= "#{alloc["totalCheckCount"]} total,\n #{alloc["passingCheckCount"]} passing" %></span>
               </td>
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= alloc["restarts"] %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2"><%= alloc["restarts"] %></span>
               </td>
 
-              <td class="px-4 py-2">
-                <span class="px-4 py-2"><%= "#{format_created_at(alloc["createdAt"])} ago" %></span>
+              <td class="px-2 py-2">
+                <span class="px-2 py-2"><%= "#{format_created_at(alloc["createdAt"])} ago" %></span>
               </td>
-
-
             </tr>
 
           <% end %>

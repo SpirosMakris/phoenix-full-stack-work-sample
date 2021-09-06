@@ -3,7 +3,7 @@ defmodule FlyWeb.AppLive.Show do
   require Logger
 
   alias Fly.Client
-  alias FlyWeb.Components.HeaderBreadcrumbs
+  alias FlyWeb.Components.{HeaderBreadcrumbs, AppStatus}
 
   @impl true
   def mount(%{"name" => name}, session, socket) do
