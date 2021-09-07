@@ -60,7 +60,8 @@ way the user can both check the status at a glance in the app list view
 and also have the same live status info in the `Show` details view along
 with the rest of the data present there.
 The liveview is mounted in the `show.html.heex` file using the `start_visible`
-option in `session` so that it is mounted in visible mode
+option in `session` so that it is mounted in visible mode and refreshes
+are performed correctly.
 
 
 
@@ -129,8 +130,10 @@ as we should stay out of the way of the user.
 * Using new HEEX syntax
 * Improved my understanding of using Phoenix LiveView (also TailWind & Alpine)
 
-The implementation took about 8-9 hours since I had so much fun. Also I
-need more practice with Tailwind because I find it is the major thing that 
+The implementation took about 8-10 hours since I had so much fun. 
+I also needed to do some debugging and verification of correct refresh
+behaviour in regards to visibility of LiveView.
+Finally, I need more practice with Tailwind because I find it is the major thing that 
 slows me down at this point.
 
 
