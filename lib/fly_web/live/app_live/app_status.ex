@@ -97,11 +97,12 @@ defmodule FlyWeb.Components.AppStatus do
     app_name = socket.assigns.app_name
     show_completed = true
 
-    # First update visible so handle_info can trigger refresh
+    # First update visible
     socket = assign(socket, visible: visible)
 
-    # Perform a status fetch
-    send(self(), {:fetch_app_status, app_name, show_completed})
+    # Perform a status fetch if we we are visible at this point
+    if visible, do:
+      send(self(), {:fetch_app_status, app_name, show_completed})
 
     {:noreply, socket}
   end
