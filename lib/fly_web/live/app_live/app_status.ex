@@ -8,12 +8,23 @@ defmodule FlyWeb.Components.AppStatus do
 
   @impl true
   def mount(_params, %{"name" => name} = session, socket) do
+    # First check if we should start visible. Check in session
+    # for key
+    visible =
+      if Map.has_key?(session, "start_visible") do
+        session["start_visible"]
+      else
+        false
+      end
+
+    Logger.debug("visible: #{visible} ")
+
     socket =
       assign(socket,
         config: client_config(session),
         state: :loading,
         loading: false,
-        visible: false,
+        visible: visible,
         app: nil,
         app_name: name,
         app_status: nil,
@@ -101,8 +112,7 @@ defmodule FlyWeb.Components.AppStatus do
     socket = assign(socket, visible: visible)
 
     # Perform a status fetch if we we are visible at this point
-    if visible, do:
-      send(self(), {:fetch_app_status, app_name, show_completed})
+    if visible, do: send(self(), {:fetch_app_status, app_name, show_completed})
 
     {:noreply, socket}
   end
@@ -113,9 +123,15 @@ defmodule FlyWeb.Components.AppStatus do
 
     period = socket.assigns.refresh_period
 
+    is_visible = socket.assigns.visible
+    Logger.debug("is_visible: #{is_visible}")
+
     # Only 'recurse' if we are visible, otherwise no point
-    if socket.assigns.visible,
-      do: Process.send_after(self(), {:fetch_app_status, app_name, show_completed}, period * 1000)
+    if is_visible do
+      Process.send_after(self(), {:fetch_app_status, app_name, show_completed}, period * 1000)
+    else
+      Logger.debug("Skipping delayed refresh")
+    end
 
     case Client.fetch_app_status(app_name, show_completed, socket.assigns.config) do
       {:ok, app_status} ->
@@ -216,7 +232,7 @@ defmodule FlyWeb.Components.AppStatus do
   end
 
   def depl_instances_table(assigns) do
-    IO.inspect(assigns)
+    # IO.inspect(assigns)
 
     ~H"""
     <div class="mt-2">
@@ -269,7 +285,7 @@ defmodule FlyWeb.Components.AppStatus do
   end
 
   def instances_table(assigns) do
-    IO.inspect(assigns)
+    # IO.inspect(assigns)
 
     ~H"""
     <div class="mt-2">

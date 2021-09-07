@@ -127,7 +127,7 @@
 
           <%# App status %>
               <div class="">                
-                <%= live_render(@socket, AppStatus, id: "app-status=#{@app["name"]}", session: %{"name" => @app["name"]}) %>
+                <%= live_render(@socket, AppStatus, id: "app-status=#{@app["name"]}", session: %{"name" => @app["name"], "start_visible" => :true}) %>
               </div>
         </div>
 

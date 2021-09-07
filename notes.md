@@ -59,13 +59,16 @@ I've also added the same AppStatus LiveView to the `Show` module. This
 way the user can both check the status at a glance in the app list view
 and also have the same live status info in the `Show` details view along
 with the rest of the data present there.
+The liveview is mounted in the `show.html.heex` file using the `start_visible`
+option in `session` so that it is mounted in visible mode
 
 
 
 ## What I didn't built
 __Stop/Restart buttons for VM in Instances Table section.__
 
-  Using these [mutations](https://github.com/superfly/flyctl/blob/master/api/resource_vms.go) for information regarding the GraphQL API call for performing such operations. 
+  Using these [mutations](https://github.com/superfly/flyctl/blob/master/api/resource_vms.go) 
+  for information regarding the GraphQL API call for performing such operations.
 
   I didn't build this feature,although it doesn't seem be hard to implement,
   because I wasn't sure this component should have functionality outside
@@ -88,6 +91,10 @@ __Stop/Restart buttons for VM in Instances Table section.__
   loading.
 
 * Move function components in `AppStatus` to their own module
+
+* Write some tests to verify that we are only fetching when visible,
+  and for fetching cycle in general. Verify that we are fetching the
+  data for the correct app, etc.
 
 * Study the API & Fly's architecture a bit more to see if there's
 some other functionality that can be implemented in this component.
