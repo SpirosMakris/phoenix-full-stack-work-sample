@@ -63,7 +63,7 @@ After you've submitted your project, we'll have 3 Fly.io engineers evaluate your
 - Don't spend time making this perfect. Rough edges are fine if it helps you move quickly, just note them in the summary.
 - Your code should be clear and easy to understand.
 - If something is too complicated, try to get by without it and explain what you wanted to do in the summary.
-- The notes are important! We want to know how you think about end users, how you ma
+- The notes are important! We want to know how you think about end users and how you think we should solve their problems.
 
 ### What we don't care about
 
@@ -75,10 +75,12 @@ After you've submitted your project, we'll have 3 Fly.io engineers evaluate your
 
 To start your Phoenix server:
 
+  * [Install `flyctl` and sign up for a Fly.io account](https://fly.io/docs/getting-started/installing-flyctl/)
   * Install dependencies with `mix deps.get`
   * Install Node.js dependencies with `npm install` inside the `assets` directory
   * Compile assets with `npm run deploy`
   * Start Phoenix endpoint with `mix phx.server`
+  * Run `flyctl auth token` to print your API token
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
