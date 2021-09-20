@@ -73,6 +73,8 @@
                   </div>
                 </button>
 
+                <%= live_component FlyWeb.Components.LogViewer, id: "log-viewer-#{app["name"]}", app_name: app["name"], config: @config %>
+
                 <%= link to: Routes.app_show_path(@socket, :show, app["name"]), class: "block hover:bg-gray-50" do %>
 
                   <div class="px-4 py-4 sm:px-6">

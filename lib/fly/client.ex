@@ -322,6 +322,34 @@ defmodule Fly.Client do
     # |> IO.inspect()
   end
 
+  def fetch_app_logs(app_name, limit, range, config) do
+    """
+    query ($appName: String!, $limit: Int!, $range: Int!) {
+      appstatus:app(name: $appName) {
+
+        allocations {
+          id
+          recentLogs(limit: $limit, range: $range) {
+            id
+            timestamp
+            message
+            level
+            region
+
+          }
+        }
+      }
+    }
+    """
+    |> perform_query(
+      %{appName: app_name, limit: limit, range: range},
+      config,
+      :fetch_app_logs
+    )
+    |> handle_response()
+    |> IO.inspect()
+  end
+
   # END @ADDED
 
   # Handle the GraphQL API responses. Handles success and error responses.
