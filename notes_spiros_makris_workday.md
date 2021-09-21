@@ -191,3 +191,30 @@ On the implementation side:
 * Should be extensible
 * Should be modular
 
+## Blog/Forum post main points
+
+* Realtime & Historical data logging
+
+* Multiple source logging
+  * Edge (Fly proxy)
+  * VM operations (start/stop/scale)
+  * App & Instance
+  
+
+* Filtering of Logs by:
+  * Region
+  * Message level
+  * Type: proxy, deployment, scaling, instance/VM
+
+* Searching
+
+* Time-windowing of logs
+
+* Easy navigation to related entries/errors across sources
+  * By time/time-window
+  * By instance ID
+
+* Split screen viewing of concurrent entries across sources
+
+* Color coding & formatting
+
